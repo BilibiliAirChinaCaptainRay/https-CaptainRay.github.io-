@@ -1,0 +1,8 @@
+title: CaptainRay Plugins Library
+description: A collection of freeware plugins and addons (English)
+baseurl: ""
+url: "https://BilibiliAirChinaCaptainRay.github.io/https-CaptainRay.github.io-"
+collections:
+  plugins:
+    output: true
+paginate: 20

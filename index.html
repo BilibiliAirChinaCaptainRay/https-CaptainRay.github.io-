@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>{{ site.title | default: "CaptainRay Plugins Library" }}</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>{{ site.title | default: "CaptainRay Plugins Library" }}</h1>
+      <p class="tagline">Freeware plugins and photo sceneries — browse by country (A → Z)</p>
+    </div>
+  </header>
+
+  <nav class="az">
+    <div class="container">
+      {% assign letters = "A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z" | split: "," %}
+      {% for l in letters %}
+        <a href="#{{ l }}">{{ l }}</a>
+      {% endfor %}
+    </div>
+  </nav>
+
+  <main class="container">
+    {% assign plugins_by_country = site.plugins | group_by: "country" | sort: "name" %}
+
+    {% comment %} Create an alphabetical index of countries {% endcomment %}
+    {% assign countries = site.plugins | map: "country" | uniq | sort %}
+    {% for letter in "A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z" | split: "," %}
+      <section id="{{ letter }}" class="country-section">
+        <h2>{{ letter }}</h2>
+        <div class="plugin-list">
+          {% for c in countries %}
+            {% if c and c != "" and c | slice: 0,1 | upcase == letter %}
+              <h3 class="country-name">{{ c }}</h3>
+              <div class="country-plugins">
+                {% assign items = site.plugins | where: "country", c | sort: "title" %}
+                {% for p in items %}
+                  <article class="plugin">
+                    <img class="thumb" src="{{ p.screenshots[0] | default: '/assets/images/placeholder.png' }}" alt="{{ p.title }}">
+                    <div class="meta">
+                      <h4><a href="{{ p.url }}">{{ p.title }}</a></h4>
+                      <p class="desc">{{ p.short_description }}</p>
+                      <p class="info">Version: {{ p.version }} &nbsp; Size: {{ p.size }}</p>
+                      <p class="downloads">
+                        {% for d in p.downloads %}
+                          <a class="download" href="{{ d.url }}" target="_blank" rel="noopener">{{ d.label }}</a>
+                        {% endfor %}
+                      </p>
+                    </div>
+                  </article>
+                {% endfor %}
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </section>
+    {% endfor %}
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>Hosted on GitHub Pages · Satellite imagery not included; users must provide their own API keys</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/lightbox.js"></script>
+</body>
+</html>
